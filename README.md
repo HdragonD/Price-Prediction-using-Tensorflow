@@ -1,4 +1,4 @@
-# Price-Prediction-using-Tensorflow
+# Price-Prediction-using-TensorFlow
 Machine learning project using TensorFlow
 
 Data Preprocessing
