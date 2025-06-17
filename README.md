@@ -23,3 +23,5 @@ Compiling the model with appropriate loss function and optimizer.
 Training the model on the x_train and y_train data.
 Evaluating the model's performance on the test set (x_test and y_test).
 Potentially fine-tuning the model hyperparameters or architecture based on the evaluation results.
+
+The script also calculates the Mean Absolute Percentage Error (MAPE) and an accuracy percentage defined as `100 - MAPE`.

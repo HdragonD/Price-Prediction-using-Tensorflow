@@ -108,6 +108,12 @@ print("RMSE", np.sqrt(mse))
 r2 = r2_score(y_test, predictions)
 print("R2 Score", r2)
 
+# calculate Mean Absolute Percentage Error (MAPE)
+mape = np.mean(np.abs((y_test - predictions) / y_test)) * 100
+accuracy = 100 - mape
+print("MAPE", mape)
+print("Accuracy (%)", accuracy)
+
 train = apple[:training] 
 test = apple[training:] 
 test['Predictions'] = predictions 
