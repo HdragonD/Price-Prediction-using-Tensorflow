@@ -1,17 +1,19 @@
-pip install tensorflow
-import pandas as pd 
-import matplotlib.pyplot as plt 
-import numpy as np 
-import tensorflow as tf 
-from tensorflow import keras 
-import seaborn as sns 
-import os 
-from datetime import datetime 
+# pip install tensorflow  # Un-comment if TensorFlow is not installed
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+import seaborn as sns
+import os
+from datetime import datetime
 
 import warnings 
 warnings.filterwarnings("ignore") 
 
-data = pd.read_csv(r"C:\Users\admin\Downloads\all_stocks_5yr.csv") 
+# Path to CSV file
+DATA_PATH = os.path.join(os.path.dirname(__file__), "all_stocks_5yr.csv")
+data = pd.read_csv(DATA_PATH)
 print(data.shape) 
 print(data.sample(7)) 
 data.info()
@@ -63,21 +65,26 @@ for i in range(60, len(train_data)):
 x_train, y_train = np.array(x_train), np.array(y_train) 
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1)) 
 
-model = keras.models.Sequential() 
-model.add(keras.layers.LSTM(units=64, 
-                            return_sequences=True, 
-                            input_shape=(x_train.shape[1], 1))) 
-model.add(keras.layers.LSTM(units=64)) 
-model.add(keras.layers.Dense(32)) 
-model.add(keras.layers.Dropout(0.5)) 
-model.add(keras.layers.Dense(1)) 
+model = keras.models.Sequential()
+model.add(keras.layers.LSTM(units=128,
+                            return_sequences=True,
+                            input_shape=(x_train.shape[1], 1)))
+model.add(keras.layers.LSTM(units=64))
+model.add(keras.layers.Dense(32, activation='relu'))
+model.add(keras.layers.Dropout(0.2))
+model.add(keras.layers.Dense(1))
 model.summary()
 
-model.compile(optimizer='adam', 
-			loss='mean_squared_error') 
-history = model.fit(x_train, 
-					y_train, 
-					epochs=10) 
+model.compile(optimizer='adam',
+                        loss='mean_squared_error')
+early_stop = keras.callbacks.EarlyStopping(monitor='val_loss',
+                                           patience=3,
+                                           restore_best_weights=True)
+history = model.fit(x_train,
+                                        y_train,
+                                        epochs=50,
+                                        validation_split=0.1,
+                                        callbacks=[early_stop])
 
 test_data = scaled_data[training - 60:, :] 
 x_test = [] 
